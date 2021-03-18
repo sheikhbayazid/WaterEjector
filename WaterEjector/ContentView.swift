@@ -8,20 +8,16 @@
 import SwiftUI
 
 struct ContentView: View {
-    
-    private let soundManager = SoundManager()
     @State private var frequencyLevel: Double = 200
     @State private var isEjectOn = false
     @State private var ejectingMessage = ""
     
+    private let soundManager = SoundManager()
     private let screen = UIScreen.main.bounds.size
-    
-    private let backgroundColor = Color(UIColor(named: "backgroundColor")!)
-    //private let circleColor = Color(UIColor(named: "circleColor")!)
     
     var body: some View {
         ZStack {
-            backgroundColor.edgesIgnoringSafeArea(.all)
+            Color(red: 0.11, green: 0.11, blue: 0.118, opacity: 0.75).ignoresSafeArea()
             
             VStack {
                 //MARK: - Heading
@@ -119,7 +115,7 @@ struct ContentView: View {
             soundManager.setToneVolume(vol: Double(soundManager.currentVolume))
             soundManager.enableSpeaker()
             soundManager.setToneTime(t: frequency)
-            //Animating op message
+            //Animating top ejecting message
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 if ejectingMessage.isEmpty {
                     withAnimation(.linear(duration: 0.4)) {
