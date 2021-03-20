@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var frequencyLevel: Double = 200
-    @State private var isEjectOn = false
+    @State private var isEjecting = false
     @State private var ejectingMessage = ""
     
     private let soundManager = SoundManager()
@@ -21,7 +21,7 @@ struct ContentView: View {
             
             VStack {
                 //MARK: - Heading
-                if isEjectOn {
+                if isEjecting {
                     Text("\(ejectingMessage)")
                         .font(.title2)
                         .frame(width: 150, height: 40)
@@ -35,7 +35,6 @@ struct ContentView: View {
                 //MARK: - Circle Button
                 VStack {
                     Button(action: {
-                        isEjectOn.toggle()
                         
                         startEjecting(at: 440)
                         
@@ -47,7 +46,7 @@ struct ContentView: View {
                                 .frame(width: frequencyLevel == 200 ? 230 : CGFloat(frequencyLevel) / 3.5, height: frequencyLevel == 200 ? 230 : CGFloat(frequencyLevel) / 3.5) //210
                                 .shadow(radius: 10, y: 5)
                             
-                            Text(isEjectOn ? "Stop" : "Eject")
+                            Text(isEjecting ? "Stop" : "Eject")
                                 .font(.title)
                                 .foregroundColor(.black)
                                 .frame(width: 170, height: 170)
@@ -87,14 +86,11 @@ struct ContentView: View {
                 //MARK: - Start Button
                 VStack {
                     Button(action: {
-                        withAnimation {
-                            isEjectOn.toggle()
-                        }
                         
                         startEjecting(at: frequencyLevel)
                         
                     }, label: {
-                        Text(isEjectOn ? "Stop" : "Start")
+                        Text(isEjecting ? "Stop" : "Start")
                             .font(.title3)
                             .foregroundColor(.white)
                             .frame(width: screen.width / 1.4, height: 45)
@@ -110,7 +106,11 @@ struct ContentView: View {
     
     //MARK: - Start Ejecting
     func startEjecting(at frequency: Double) {
-        if isEjectOn{
+        withAnimation {
+            isEjecting.toggle()
+        }
+        
+        if isEjecting{
             soundManager.setFrequency(freq: frequency)
             soundManager.setToneVolume(vol: Double(soundManager.currentVolume))
             soundManager.enableSpeaker()
